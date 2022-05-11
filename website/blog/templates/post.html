@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container ">
+    <h1>{{ post_detail.title | safe }}</h1>
+    <h6 class="blockquote-footer">{{ post_detail.author|title }}</h6>
+    <hr>
+    <p>{{ post_detail.post | safe }}</p>
+    <hr>
+    <div>
+        {% if object.author == user %}
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Edit</a>
+        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+        {% endif %}
+        <a class="btn btn-outline-warning btn-sm mt-1 mb-1" href="{{request.META.HTTP_REFERER}}">Go back</a>
+    </div>
+</div>
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {% if user.is_authenticated %}
+                <hr><br/>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn btn-primary btn-sm m-0" type="submit" value="Submit">
+                </form>
+                {% endif %}
+            </div>
+            <div class="col">
+                <hr>
+                <h4>Coments:</h4>
+                {% if post_detail.comments.all %}
+                {% for review in post_detail.comments.all %}
+                <br>
+            <div class="m-6">
+                <strong>{{ review.reviewer|title }}</strong>, <em>{{ review.date_created}}</em>
+                {% if review.reviewer == user %}
+                <a href="{% url 'comment-update' review.id %}">Edit</a>
+                <a class="text-danger" href="{% url 'delete-comment' review.id %}">Delete</a>
+                {% endif %}
+                <p>{{ review.comment }}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>Post has no comments yet.</p>
+            {% endif %}
+            </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

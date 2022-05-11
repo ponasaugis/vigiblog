@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}My Posts{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>My posts</h1>
+    <hr>
+    {% if posts %}
+        {% for post in posts %}
+    <div class="card mt-2" style="width: 80%;">
+        <div class="card-body">
+            <h4 class="card-title" >{{post.title | safe }}</h4>
+            <p class="card-text">{{post.post | safe }}</p>
+            <a class="btn btn-secondary btn-sm m-1 float-right" href="{% url 'post-update' post.pk %}">Edit</a>
+            <a class="btn btn-danger btn-sm m-1 float-right" href="{% url 'post-delete' post.pk %}">Delete</a>
+            <a class="btn btn-warning btn-sm m-1 float-right" href="{{ post.pk }}" role="button">Go for it!</a>
+        </div>
+    </div>
+
+
+{% endfor %}
+    {% else %}
+      <p>There are no posts from you yet.</p>
+    {% endif %}
+    </div>
+{% endblock %}
